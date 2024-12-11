@@ -1,7 +1,4 @@
-﻿
-
-
-function Use-RunAs 
+﻿function Use-RunAs 
 {    
     # Check if script is running as Adminstrator and if not use RunAs 
     # Use Check Switch to check if admin 
@@ -37,9 +34,6 @@ function Use-RunAs
     }  
 } 
  
- 
- 
-
 #ask for admin rights
 Use-RunAs
 "Running as administrator"
@@ -59,7 +53,6 @@ Set-Service WinRM -StartMode Automatic -ErrorAction SilentlyContinue
 # Verify start mode and state - it should be running
 #Get-WmiObject -Class win32_service | Where-Object {$_.name -like "WinRM"}
 
-
 # Trust all hosts
 Set-Item WSMan:localhost\client\trustedhosts -value * -ErrorAction SilentlyContinue
 
@@ -69,8 +62,6 @@ Set-Item WSMan:localhost\client\trustedhosts -value * -ErrorAction SilentlyConti
 # Verify trusted hosts configuration
 #Get-Item WSMan:\localhost\Client\TrustedHosts
 ""
-
-
 Try {
     Enable-PSRemoting –force
 }Catch {

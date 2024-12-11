@@ -2,8 +2,6 @@
 
 Set-Location $args[0]
 
-
-
 Try{. .\Config.ps1 -ErrorAction Stop}
 Catch {
     Write-Host Config File could not ne loaded. Looks like you removed the config file, left it open, or that you made a error when ediditng it.
@@ -11,11 +9,6 @@ Catch {
     Start-Sleep -s 60
     Break
 }
-
-
-
-
-
 
 function simulate-keys{
 
@@ -25,14 +18,10 @@ function simulate-keys{
 		[bool]$save=$true
     )
 
-
-
     Try{
 
         $text = Get-Content Misc\to_write.txt
         $text = $text.Split(" ")
-
-
     
         $wshell = new-object -comObject wscript.shell -ErrorAction Stop
 
@@ -42,12 +31,9 @@ function simulate-keys{
         $null = $wshell.AppActivate('written - Notepad')
         Sleep 1
 
-
         #clear file
         $wshell.SendKeys("^{a}")
         $wshell.SendKeys("{DEL}")
-
-
 
         #sending keystrokes, with letters well separated, one after each other
        
@@ -63,8 +49,6 @@ function simulate-keys{
             $wshell.sendkeys(" ")
         }
 
-
-
         if ($save){$wshell.SendKeys("^{s}");$wshell.SendKeys("%{F4}")}
 
      }
@@ -74,10 +58,4 @@ function simulate-keys{
      if (!$Error){"Result: Typing simulation completed succesfully"}
 }
 
-
-
-
 simulate-keys
-
-
-

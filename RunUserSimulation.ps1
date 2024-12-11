@@ -1,11 +1,7 @@
-
-
 #just in case it was launched from the wrong folder, as the present working directory
 # NEEDS to be the one containing the script (because of relative-path dot sourcing other modules)
 $script_path = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 cd $script_path
-
-
 
 #generate logs
 $ErrorActionPreference="SilentlyContinue"
@@ -15,12 +11,7 @@ $LogName = Get-Date -Format "yyyy-MM-dd-----HH-mm-ss"
 $global:global_Log = ".\Logs\" + $LogName + ".txt"
 Start-Transcript -path $global_Log -append -IncludeInvocationHeader
 
-
-
-
 # Start the actual script
-
-
 
 #import config and tools, and modules
 Try{. .\Config.ps1 -ErrorAction Stop}
@@ -38,16 +29,6 @@ Catch {
     Start-Sleep -s 60
     Break
 }
-
-
-
-
-
-
-
-
-
-
 function simulate-user 
 {
 <#
@@ -96,7 +77,6 @@ Some of the powershell cmdlets require powershell version 3+
 		[int]$duration = 0
     )
 
-
     $pc = "all"
     $list_computer = ,$pc
     $IEhash = @{}
@@ -107,7 +87,6 @@ Some of the powershell cmdlets require powershell version 3+
     $Maphash.Add($pc, $MapShare)
     $Typehash.Add($pc, $Typing)
   
-
     "Start of operations"
     $round_counter = 0
     $startDate = Get-Date
@@ -121,9 +100,7 @@ Some of the powershell cmdlets require powershell version 3+
         $round_counter += $displayheader #only increase count if we displayed the previous header
         $displayheader = $false #set to false to only display non-empty round headers 
 
-
         if ($schedule) {$IEhash, $Maphash, $Typehash, $line_number, $lastactiontimestamp = update-schedule -IEhash $IEhash -Maphash $Maphash -Typehash $Typehash -line_number $line_number -lastactiontimestamp $lastactiontimestamp -PClist $list_computer}
-
 
         ########################################################################place new features under this
 
@@ -152,19 +129,16 @@ Some of the powershell cmdlets require powershell version 3+
             Start-Sleep -s $Unactivity
         } #generate IE activity
 
-
         if ($Maphash[$pc]){
             $job = Start-Job -Name MapShare -ArgumentList $pwd -FilePath .\Modules\MapShare.ps1
             Get-Job | Wait-Job -Timeout $actiontimeout | Receive-Job
   
-            
             #failsafe so no stray windows/process
             (Get-Job MapSharesimu -ErrorAction SilentlyContinue | Stop-Job) |Out-Null
             "-------------------------------------------------------------------------------"
             $displayheader = $true
             Start-Sleep -s $Unactivity
         } #generate shares map activity
-
 
         if ($Typehash[$pc]){
                 $job = Start-Job -Name Typekey -ArgumentList $pwd -FilePath "Modules\Type.ps1"
@@ -178,12 +152,9 @@ Some of the powershell cmdlets require powershell version 3+
                 Start-Sleep -s $Unactivity
         }#generate key strokes activity
 
-
-
         #######################################################################place new features above this
 
     }#end of while
-    
     
     #stop the transcript
     Stop-Transcript
@@ -192,28 +163,11 @@ Some of the powershell cmdlets require powershell version 3+
         sendlogmail -Path $global_Log -SmtpServer $PSEmailServer -ToAddress $email_address
         }
 
-
     "This is the end of the user simulation"
     "Script will exit in one minute"
     Start-Sleep -s 60
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function simulate-user-server 
 {
@@ -228,12 +182,8 @@ If the computer is to detect automatically the PCs on the same network. Not reli
 .PARAMETER PClist
 In case autodetect is disabled, provide a list of the PCs of the network to send tasks to.
 
-
-
-
 .NOTES
 Some of the powershell cmdlets require powershell version 3+
-
 
 #>
     [CmdletBinding()]
@@ -258,7 +208,6 @@ Some of the powershell cmdlets require powershell version 3+
 		[array]$PClist
     )
 
-
     Use-RunAs
     "Running as administrator"
 
@@ -280,8 +229,6 @@ Some of the powershell cmdlets require powershell version 3+
         $list_computer
         "Start of operations"
     }
-
-
         
     $IEhash = @{}
     $Maphash = @{}
@@ -293,10 +240,6 @@ Some of the powershell cmdlets require powershell version 3+
         $Typehash.Add($pc, $Typing)
     }
   
-
-
-
-
     $round_counter = 0
     $startDate = Get-Date
     $lastactiontimestamp = [int]((Get-Date -UFormat "%R").Split(":")[0]) * 60 + [int]((Get-Date -UFormat "%R").Split(":")[1]) #time of the day but in minutes
@@ -311,7 +254,6 @@ Some of the powershell cmdlets require powershell version 3+
              if ($schedule) {$IEhash, $Maphash, $Typehash, $line_number, $lastactiontimestamp = update-schedule -IEhash $IEhash -Maphash $Maphash -Typehash $Typehash -line_number $line_number -lastactiontimestamp $lastactiontimestamp -PClist $list_computer}
 
             ########################################################################place new features under this
-
 
             if ($true){
                 "#####IE activity####"
@@ -387,36 +329,11 @@ Some of the powershell cmdlets require powershell version 3+
                 catch {"Failed to send command to remote PC"}
             } #generate shares map activity
 
-
             #######################################################################place new features above this
 
     }#end of while
-    
-
-
-
-
-
-        
+            
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #Launch the correct script
 
@@ -434,21 +351,7 @@ else {
 "Script will exit in one minute"
 Start-Sleep -s 60
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#stop the transcrit if it was not stopped before
+#stop the transcript if it was not stopped before
 $ErrorActionPreference="SilentlyContinue"
 Stop-Transcript | out-null
 $ErrorActionPreference = "Continue"

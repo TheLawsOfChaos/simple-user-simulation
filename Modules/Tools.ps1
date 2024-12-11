@@ -1,5 +1,3 @@
-
-
 <# 
 .Synopsis 
    Function to email a specified log file. 
@@ -70,8 +68,6 @@ function sendlogmail
     } 
 }
 
-
-
 function Start-Process-Active
 {
     param
@@ -118,9 +114,6 @@ function Start-Process-Active
 
 }
 
-
-
-
 function log_header 
 {
     Param([int]$round_counter,
@@ -135,9 +128,6 @@ function log_header
         "=============================================================="
     }
 }
-
-
-
 
 function Use-RunAs 
 {    
@@ -177,9 +167,6 @@ function Use-RunAs
     }  
 } 
  
- 
-
-
  function something-to-do
  {
     Param([hashtable]$hash)
@@ -205,9 +192,6 @@ function Use-RunAs
 
     return $Action, $Parameter, $PC, $timetype, $minutes
  }
-
- 
-
  function change-variables
  {
      [CmdletBinding()]
@@ -264,10 +248,6 @@ function Use-RunAs
  
  }
 
-
-
-
-
  function update-schedule
  <#return a new set of variables for each scheduled event
  #>
@@ -297,16 +277,11 @@ function Use-RunAs
         return $IEhash,$Maphash, $Typehash, ($line_number+1), $lastactiontimestamp
     }#do not change anything if two same lines or last line of the file
 
-
-
-
     if ($Nexttimetype -eq "at"){
         if ($now -ge $Nextminutes){
             return (change-variables -IEhash $IEhash -Maphash $Maphash -Typehash $Typehash -Action $NextAction -Parameter $NextParameter -PC $NextPC -line_number $line_number -PClist $PClist)
         }
     }
-
-
 
     if ($Nexttimetype -eq "after"){
         $diff = $now - $lastactiontimestamp
@@ -318,5 +293,3 @@ function Use-RunAs
     return $IEhash, $Maphash,$Typehash, $line_number, $lastactiontimestamp
  
  }
-
-

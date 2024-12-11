@@ -1,7 +1,5 @@
 ﻿Set-Location $args[0]
 
-
-
 Try{. .\Config.ps1 -ErrorAction Stop}
 Catch {
     Write-Host Config File could not ne loaded. Looks like you removed the config file, left it open, or that you made a error when ediditng it.
@@ -9,11 +7,6 @@ Catch {
     Start-Sleep -s 60
     Break
 }
-
-
-
-
-
 
 function simulateIE
 {
@@ -26,15 +19,10 @@ function simulateIE
         )
 
     Try {
-
-
-
         $url2 = get_url
-        browse -url $url2 -depth $depth -quitafter $quitafter -ErrorAction Stop
-	   
+        browse -url $url2 -depth $depth -quitafter $quitafter -ErrorAction Stop  
     }
     Catch {
-
        "Result: Something failed with IE simulation"
     }
     if(!$Error){"Result: IE simulation successfully completed"}
@@ -42,16 +30,9 @@ function simulateIE
     #close everything
     $temp = (Get-Process iexplore -ErrorAction SilentlyContinue | Stop-Process) 
     $temp = (Get-Process ielowutil -ErrorAction SilentlyContinue | Stop-Process) 
-
 }
-
-
-
-
-
 function browse 
 {
-
 # open internet explorer and follow links found on the page up to provided depth
     [CmdletBinding()]
     Param ([string]$url,
@@ -61,7 +42,6 @@ function browse
     $IE = New-Object -com internetexplorer.application 
     $IE.visible = $true
 
-
     $asm = [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
     $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
     $ie.Width = $screen.width
@@ -69,17 +49,11 @@ function browse
     $ie.Top =  0
     $ie.Left = 0
 
-
-
     $IE.navigate2($url)
     $IE.visible = $true
     Start-Sleep -s $quitafter
   
-
     while ($depth -gt 0){
-
-
-
      $hsg = Invoke-WebRequest -Uri ($url) -UseBasicParsing
 
         #get all valid links in the page
@@ -88,35 +62,20 @@ function browse
 
         #if there are links in the page
         if ($nblink -gt 0) {
-            
-
             #prepare next link and depth for recursive call
             $url = $links[(Get-Random -Maximum ([array]$links).count)]
-
-
-
             $IE.navigate2($url)
             $IE.visible = $true
             Start-Sleep -s $quitafter
-
             $depth = $depth - 1 
-     
        }
     }
-
-
     Start-Sleep -s 2
-
     $IE.quit()
-    
 }
-
-
-
 
 function get_url
 {
-
     $url = $IE_URIs[(Get-Random -Maximum ([array]$IE_URIs).count)]
     return $url
 }
